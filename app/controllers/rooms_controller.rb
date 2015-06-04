@@ -9,8 +9,8 @@ class RoomsController < ApplicationController
 	def create
 		session = @opentok.create_session
 		params[:room][:sessionId] = session.session_id
-		# render Room.new(params[:room])
-		@new_room = Room.new(params[:room])
+		# render :json => new_room_params
+		@new_room = Room.new(new_room_params)
 
 		respond_to do |format|
 			if @new_room.save
@@ -24,8 +24,8 @@ class RoomsController < ApplicationController
 
 	def party
 		@room = Room.find(params[:id])
-
-		@tok_token = @opentok.generate_token :session_id =>@room.sessionId 
+		# render :json => @room
+		@tok_token = @opentok.generate_token @room.sessionId 
 	end
 
 	private
@@ -36,7 +36,7 @@ class RoomsController < ApplicationController
 	end
 
 	def new_room_params
-    	params.require(:room).permit(:name, :public )
+    	params.require(:room).permit(:name, :public, :sessionId )
   	end
 
 end

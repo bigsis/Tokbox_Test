@@ -13,13 +13,13 @@
 	TB.setLogLevel(TB.DEBUG);
 	//session.connect(apiKey, token);
 	var session = TB.initSession(sessionId);
-	session.addEventListener(‘sessionConnected’, sessionConnectedHandler);
-	session.addEventListener(‘streamCreated’, streamCreatedHandler);
+	session.addEventListener('sessionConnected', sessionConnectedHandler);
+	session.addEventListener('streamCreated', streamCreatedHandler);
 	session.connect(apiKey, token);
 
 	var publisher;
 	function sessionConnectedHandler(event) {
-		publisher = TB.initPublisher(apiKey, ‘videobox’);
+		publisher = TB.initPublisher(apiKey, 'videobox');
 		session.publish(publisher);
 
 		// Subscribe to streams that were in the session when we connected
