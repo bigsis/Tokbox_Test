@@ -9,17 +9,17 @@ class RoomsController < ApplicationController
 	def create
 		session = @opentok.create_session
 		params[:room][:sessionId] = session.session_id
-		render Room.new(params[:room])
-		# @new_room = Room.new(params[:room])
+		# render Room.new(params[:room])
+		@new_room = Room.new(params[:room])
 
-		# respond_to do |format|
-		# 	if @new_room.save
-		# 		format.html { redirect_to('/party/'+@new_room.id.to_s) }
-		# 	else
-		# 		format.html { render :controller => 'rooms',
-		# 		:action => 'index' }
-		# 	end
-		# end
+		respond_to do |format|
+			if @new_room.save
+				format.html { redirect_to('/party/'+@new_room.id.to_s) }
+			else
+				format.html { render :controller => 'rooms',
+				:action => 'index' }
+			end
+		end
 	end
 
 	def party
@@ -36,7 +36,7 @@ class RoomsController < ApplicationController
 	end
 
 	def new_room_params
-    params.require(:room).permit(:name, :public )
-  end
+    	params.require(:room).permit(:name, :public )
+  	end
 
 end
