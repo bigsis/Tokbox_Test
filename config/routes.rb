@@ -7,6 +7,8 @@ Rails.application.routes.draw do
 
   get 'rooms/config_opentok'
 
+  post 'archive' => 'rooms#archive'
+
    root :to => 'rooms#index'
     resources :rooms
    match '/party/:id', :to => 'rooms#party', :as => :party, :via => :get

@@ -1,5 +1,5 @@
 class RoomsController < ApplicationController
-	
+	before_action :config_opentok
 	before_filter :config_opentok,:except => [:index]
 	def index
 		@rooms = Room.where(:public => true).order('created_at DESC')
@@ -26,6 +26,18 @@ class RoomsController < ApplicationController
 		@room = Room.find(params[:id])
 		# render :json => @room
 		@tok_token = @opentok.generate_token @room.sessionId 
+	end
+
+	def archive
+		 # logger.debug "arams"
+		# 
+		if request.xhr?
+        	archive = opentok.archives.create params[:sessionId]
+     	end
+	end
+
+	def disconnect
+
 	end
 
 	private

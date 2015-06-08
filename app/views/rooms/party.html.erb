@@ -2,11 +2,18 @@
 <div id='videobox'>
 
 </div>
+<button id="start">Start Record</botton>
+<button id="stop">End Record</button>
 <script src='http://static.opentok.com/v2/js/opentok.min.js'></script>
 <script type='text/javascript'>
+$(document).ready(function(){
+
 	var apiKey = '45253112';
+	var apiSecret = '989f43ac66fdf6688f1b9719168ee8292d3ce153';
 	var sessionId = '<%= @room.sessionId %>';
 	var token = '<%= @tok_token %>';
+	var opentok = '<%= @opentok %>'
+	var archive;
 
 	var session;
 
@@ -47,5 +54,46 @@
 			session.subscribe(streams[i], div.id);
 		}
 	}
+
+	var connectionCount = 0;
+	session.on({
+	  connectionCreated: function (event) {
+	    connectionCount++;
+	    if (event.connection.connectionId != session.connection.connectionId) {
+	      return true;
+	    }
+	  },
+	  connectionDestroyed: function connectionDestroyedHandler(event) {
+	    connectionCount--;
+	    alert('A client disconnected. ' + connectionCount + ' total.');
+	  }
+	});
+	session.connect(token, function (error) {
+	  if (error) {
+	    console.log("Failed to connect.");
+	  } else {
+	    console.log('You have connected to the session.');
+	  }
+	});
+
+	$('#start').click(function(){
+    	$.ajax({
+		    url: "<%= archive_path %>",
+		    type: "POST",
+		    data: {
+		    	sessionId: sessionId+""
+            },
+            dataType: 'json',
+            error: function() {
+                        alert("Ajax error!")
+                      }
+
+		});
+    });
+
+    function stop(){
+    	archive.stop;
+    }
+});
 </script>
 
