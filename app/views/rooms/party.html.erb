@@ -1,16 +1,17 @@
-<div id='invitation'>Invite your friends! Share the url of this page http://your-domain-name/party/<%= @room.id %></div>
-<div class='video-container'>
-	<div id='videobox' >
+<div class='container'>
+
+	<div id='subbox' >
+		<div id='videobox' >
+		</div>
 	</div>
-	<div>
-		publisher
-	</div>
+
 </div>
 <script src="https://static.opentok.com/v2/js/opentok.min.js"></script>
 <script type='text/javascript'>
 	var apiKey = '45253112';
 	var apiSecret = '989f43ac66fdf6688f1b9719168ee8292d3ce153';
 	var sessionId = '<%= @room.sessionId %>';
+	var room = '<%= @room %>';
 	var token = '<%= @tok_token %>';
 	var opentok = '<%= @opentok %>';
 	var archive;
@@ -21,8 +22,8 @@
 	var connectionCount = 1;
 	var publisher;
 function sessionConnectedHandler(event) {
-		publisher = TB.initPublisher(apiKey, 'videobox');
-		session.publish(publisher, {width: "100%", height: "100%"});
+		publisher = TB.initPublisher(apiKey, 'videobox',{width: "100%", height: "100%",resolution: '1280x720',frameRate: 30});
+		session.publish(publisher);
 
 		// Subscribe to streams that were in the session when we connected
 		subscribeToStreams(event.streams);
@@ -34,26 +35,29 @@ function streamCreatedHandler(event) {
 }
 
 function subscribeToStreams(streams) {
+	if (connectionCount > 2) return;
+	connectionCount++;
+		
 	for (var i = 0; i < streams.length; i++) {
 		// Make sure we don’t subscribe to ourself
 		if (streams[i].connection.connectionId == session.connection.connectionId) {
 			return;
 		}
-		connectionCount++;
 		// Create the div to put the subscriber element in to
 		// var div = bigBox[0];
 		// div.setAttribute('id', 'stream' + streams[i].streamId);
 		// div.attr('class','big-videobox');
 		// document.body.appendChild(div);
 
-
+		x = document.getElementsByClassName("container");
 		var div = document.createElement('div');
 		div.setAttribute('id', 'stream' + streams[i].streamId);
-		div.setAttribute('class', 'subscriber');
-		document.body.appendChild(div);
+		div.setAttribute('class', 'subscriber z-depth-3');
+		x[0].appendChild(div);
 
 		// Subscribe to the stream
-		session.subscribe(streams[i], div.id, {width: "100px", height: "100px"});
+		session.subscribe(streams[i], div.id,{width: "100%", height: "100%"});
+		div.appendChild(document.getElementById("subbox"));
 	}
 }
 

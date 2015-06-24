@@ -1,28 +1,31 @@
-<div id='newRoom'>
-	<fieldset>
-	<legend>Start a new party room</legend>
-	<%= form_for(@new_room) do |f| %>
-		Party Name: <%= f.text_field :name %><br/><br/>
-		Public? <%= f.check_box :public %><br/><br/>
 
-		<%= f.submit %>
-	<% end %>
+<div class='container'>
+	<div id='newRoom'>
+		<fieldset>
+		<h5>Start a new party room</h5>
+		<%= form_for(@new_room) do |f| %>
+			Party Name: <%= f.text_field :name %><br/><br/>
+			Public? <%= f.check_box :public ,{ class: 'public-check' }%><br/><br/>
+
+			<%= f.submit %>
+		<% end %>
+		</fieldset>
+	</div>
+
+	<fieldset>
+		<h5>Existing party rooms</h5>
+		<table cellpadding='2' cellspacing='5'>
+			<tr>
+				<th>Name</th>
+				<th>Started</th>
+			</tr>
+
+			<% @rooms.each do |room| %>
+				<tr>
+					<td align='center' width='300px'><a href='/party/<%= room.id %>'><%= room.name %></a></td>
+					<td><%= room.created_at %></td>
+				</tr>
+			<% end %>
+		</table>
 	</fieldset>
 </div>
-
-<fieldset>
-	<legend>Existing party rooms</legend>
-	<table cellpadding='2' cellspacing='5'>
-		<tr>
-			<th>Name</th>
-			<th>Started</th>
-		</tr>
-
-		<% @rooms.each do |room| %>
-			<tr>
-				<td align='center' width='300px'><a href='/party/<%= room.id %>'><%= room.name %></a></td>
-				<td><%= room.created_at %></td>
-			</tr>
-		<% end %>
-	</table>
-</fieldset>

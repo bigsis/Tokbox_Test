@@ -7,7 +7,7 @@ class RoomsController < ApplicationController
 	end
 
 	def create
-		session = @opentok.create_session
+		session = @opentok.create_session :media_mode => :relayed
 		# render :json => session
 		params[:room][:sessionId] = session.session_id
 		# render :json => new_room_params

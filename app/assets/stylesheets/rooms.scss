@@ -1,22 +1,71 @@
 // Place all the styles related to the rooms controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
-#videobox {
-	width: 100px !important;
-	height: 100px !important;
-	margin: auto;
+@import "materialize";
+
+body {
+	background-color: #0d47a1;
 }
 
-.video-container {
-	width: 100px;
-	height: 120px;
-	background: #000000;
-	color: #FFFFFF;
-	float: left;
-	text-align: center;
-
+fieldset {
+	padding-left: 10%;
+	margin: 10px;
+	background-color: #FFFFFF;
+}
+.container {
+	min-height: 100vh;
 }
 
 .subscriber {
-	float: left;
+	position: relative;
+	min-height: 100vh !important;
 }
+
+#subbox {
+	bottom: 10px;
+	right: 10px;
+	min-height: 50px !important;
+	position: absolute;
+
+}
+#videobox {
+		min-height: 70px !important;
+		min-width: 90px !important;
+	}
+.public-check {
+	position: relative !important;
+	left: 0px !important;
+}
+// @media #{$small-and-down} {
+// 	.subscriber {
+// 		min-height: 100vh !important;
+// 	}	
+
+// 	#videobox {
+// 		min-height: 50px !important;
+// 	}
+// }
+// @media #{$medium-and-up} {
+// 	.subscriber {
+// 		min-height: 100% !important;
+// 	}	
+// 	#videobox {
+// 		min-height: 100px !important;
+// 	}
+// }
+// @media #{$medium-and-down} {
+// 	.subscriber {
+// 		min-height: 100% !important;
+// 	}	
+// 	#videobox {
+// 		min-height: 70px !important;
+// 	}
+// }
+// @media #{$large-and-up} {
+// 	.subscriber {
+// 		min-height: 100% !important;
+// 	}	
+// 	#videobox {
+// 		min-height: 100px !important;
+// 	}
+// }
