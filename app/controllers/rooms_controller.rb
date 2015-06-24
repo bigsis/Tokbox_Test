@@ -8,6 +8,7 @@ class RoomsController < ApplicationController
 
 	def create
 		session = @opentok.create_session
+		# render :json => session
 		params[:room][:sessionId] = session.session_id
 		# render :json => new_room_params
 		@new_room = Room.new(new_room_params)
@@ -29,11 +30,7 @@ class RoomsController < ApplicationController
 	end
 
 	def archive
-		 # logger.debug "arams"
-		# 
-		if request.xhr?
-        	archive = opentok.archives.create params[:sessionId]
-     	end
+
 	end
 
 	def disconnect

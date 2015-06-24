@@ -1,3 +1,22 @@
 // Place all the styles related to the rooms controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+#videobox {
+	width: 100px !important;
+	height: 100px !important;
+	margin: auto;
+}
+
+.video-container {
+	width: 100px;
+	height: 120px;
+	background: #000000;
+	color: #FFFFFF;
+	float: left;
+	text-align: center;
+
+}
+
+.subscriber {
+	float: left;
+}

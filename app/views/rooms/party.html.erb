@@ -1,73 +1,76 @@
 <div id='invitation'>Invite your friends! Share the url of this page http://your-domain-name/party/<%= @room.id %></div>
-<div id='videobox'>
-
+<div class='video-container'>
+	<div id='videobox' >
+	</div>
+	<div>
+		publisher
+	</div>
 </div>
-<button id="start">Start Record</botton>
-<button id="stop">End Record</button>
-<script src='http://static.opentok.com/v2/js/opentok.min.js'></script>
+<script src="https://static.opentok.com/v2/js/opentok.min.js"></script>
 <script type='text/javascript'>
-$(document).ready(function(){
-
 	var apiKey = '45253112';
 	var apiSecret = '989f43ac66fdf6688f1b9719168ee8292d3ce153';
 	var sessionId = '<%= @room.sessionId %>';
 	var token = '<%= @tok_token %>';
-	var opentok = '<%= @opentok %>'
+	var opentok = '<%= @opentok %>';
 	var archive;
-
 	var session;
-
-	TB.setLogLevel(TB.DEBUG);
-	//session.connect(apiKey, token);
-	var session = TB.initSession(sessionId);
-	session.addEventListener('sessionConnected', sessionConnectedHandler);
-	session.addEventListener('streamCreated', streamCreatedHandler);
-	session.connect(apiKey, token);
-
+	var container = $('.video-container');
+	var bigBox = $('.big-videobox');
+	var video = $('#videobox');
+	var connectionCount = 1;
 	var publisher;
-	function sessionConnectedHandler(event) {
+function sessionConnectedHandler(event) {
 		publisher = TB.initPublisher(apiKey, 'videobox');
-		session.publish(publisher);
+		session.publish(publisher, {width: "100%", height: "100%"});
 
 		// Subscribe to streams that were in the session when we connected
 		subscribeToStreams(event.streams);
 	}
 
-	function streamCreatedHandler(event) {
-		// Subscribe to any new streams that are created
-		subscribeToStreams(event.streams);
-	}
+function streamCreatedHandler(event) {
+	// Subscribe to any new streams that are created
+	subscribeToStreams(event.streams);
+}
 
-	function subscribeToStreams(streams) {
-		for (var i = 0; i < streams.length; i++) {
-			// Make sure we don’t subscribe to ourself
-			if (streams[i].connection.connectionId == session.connection.connectionId) {
-				return;
-			}
-
-			// Create the div to put the subscriber element in to
-			var div = document.createElement('div');
-			div.setAttribute('id', 'stream' + streams[i].streamId);
-			document.body.appendChild(div);
-
-			// Subscribe to the stream
-			session.subscribe(streams[i], div.id);
+function subscribeToStreams(streams) {
+	for (var i = 0; i < streams.length; i++) {
+		// Make sure we don’t subscribe to ourself
+		if (streams[i].connection.connectionId == session.connection.connectionId) {
+			return;
 		}
+		connectionCount++;
+		// Create the div to put the subscriber element in to
+		// var div = bigBox[0];
+		// div.setAttribute('id', 'stream' + streams[i].streamId);
+		// div.attr('class','big-videobox');
+		// document.body.appendChild(div);
+
+
+		var div = document.createElement('div');
+		div.setAttribute('id', 'stream' + streams[i].streamId);
+		div.setAttribute('class', 'subscriber');
+		document.body.appendChild(div);
+
+		// Subscribe to the stream
+		session.subscribe(streams[i], div.id, {width: "100px", height: "100px"});
+	}
+}
+
+	function connectionDestroyedHandler(event) {
+		connectionCount--;
+		console.log('this is event: ' + event.streams);
+
 	}
 
-	var connectionCount = 0;
-	session.on({
-	  connectionCreated: function (event) {
-	    connectionCount++;
-	    if (event.connection.connectionId != session.connection.connectionId) {
-	      return true;
-	    }
-	  },
-	  connectionDestroyed: function connectionDestroyedHandler(event) {
-	    connectionCount--;
-	    alert('A client disconnected. ' + connectionCount + ' total.');
-	  }
-	});
+$(document).ready(function(){
+	TB.setLogLevel(TB.DEBUG);
+	//session.connect(apiKey, token);
+	session = TB.initSession(sessionId);
+	session.addEventListener('sessionConnected', sessionConnectedHandler);
+	session.addEventListener('streamCreated', streamCreatedHandler);
+	session.addEventListener('connectionDestroyed', connectionDestroyedHandler)
+	session.connect(apiKey, token);
 	session.connect(token, function (error) {
 	  if (error) {
 	    console.log("Failed to connect.");
@@ -76,24 +79,6 @@ $(document).ready(function(){
 	  }
 	});
 
-	$('#start').click(function(){
-    	$.ajax({
-		    url: "<%= archive_path %>",
-		    type: "POST",
-		    data: {
-		    	sessionId: sessionId+""
-            },
-            dataType: 'json',
-            error: function() {
-                        alert("Ajax error!")
-                      }
-
-		});
-    });
-
-    function stop(){
-    	archive.stop;
-    }
 });
 </script>
 

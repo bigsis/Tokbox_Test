@@ -160,7 +160,7 @@ DEPENDENCIES
   coffee-rails (~> 4.1.0)
   jbuilder (~> 2.0)
   jquery-rails
-  opentok (~> 2.2)
+  opentok (~> 2.2.2)
   pg (= 0.17.1)
   rails (= 4.2.1)
   rails_12factor (= 0.0.2)
